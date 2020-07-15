@@ -11,6 +11,6 @@ run:
 dry-run:
 	set -o pipefail; docker run -i --rm -e REGISTRY_USERNAME -e REGISTRY_PASSWORD $(dockerfiler_reference) < manifest.json | bash
 
-## Usage: make test-build target=dockerizedtools/flake8:3.8.3
+## Test building an individual image. Usage: make test-build target=dockerizedtools/flake8:3.8.3
 test-build:
 	set -o pipefail; docker run -i --rm $(dockerfiler_reference) --target $(target) < manifest.json | bash
