@@ -15,10 +15,12 @@ jobs:
         REGISTRY_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
 
   build-images-with-push:
-    if: github.ref == 'refs/heads/master'
+    #if: github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
+    - name: Docker login
+      run: docker login --username ${{ secrets.DOCKERHUB_USER }} --password ${{ secrets.DOCKERHUB_PASSWORD }}
     - name: Run Dockerfiler (with push)
       run: make run
       env:
