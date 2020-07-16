@@ -2,7 +2,7 @@
   "dockerizedtools/black": [
     {
       "type": "build",
-      "dockerfile_path": "Dockerfile/black.Dockerfile",
+      "dockerfile_path": "Dockerfile/black/Dockerfile",
       "tags": {
         "19.10b0": null
       }
@@ -11,7 +11,7 @@
   "dockerizedtools/flake8": [
     {
       "type": "build",
-      "dockerfile_path": "Dockerfile/flake8.Dockerfile",
+      "dockerfile_path": "Dockerfile/flake8/Dockerfile",
       "tags": {
         "3.8.3": null
       }
@@ -20,7 +20,7 @@
   "dockerizedtools/mypy": [
     {
       "type": "build",
-      "dockerfile_path": "Dockerfile/mypy.Dockerfile",
+      "dockerfile_path": "Dockerfile/mypy/Dockerfile",
       "tags": {
         "0.782": null
       }
@@ -29,7 +29,7 @@
   "dockerizedtools/openssl": [
     {
       "type": "build",
-      "dockerfile_path": "Dockerfile/openssl.Dockerfile",
+      "dockerfile_path": "Dockerfile/openssl/Dockerfile",
       "tags": {
         "1.1.1g": {
           "PACKAGE_VERSION": "1.1.1g-r0"
