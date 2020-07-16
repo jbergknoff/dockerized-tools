@@ -18,7 +18,7 @@ jobs:
     if: github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
     steps:
-    - users: actions/checkout@v2
+    - uses: actions/checkout@v2
     - name: Run Dockerfiler (with push)
       run: make run
       env:
