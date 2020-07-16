@@ -1,4 +1,4 @@
-# dockerizedtools
+# dockerized-tools
 
 Dockerfiles for many tools, built into images hosted on Docker Hub by [Dockerfiler](https://github.com/jbergknoff/Dockerfiler).
 
