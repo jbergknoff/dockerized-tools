@@ -3,19 +3,26 @@ name: Build images
 on: push
 
 jobs:
-  build-images:
+  build-images-without-push:
+    if: github.ref != 'refs/heads/master'
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - name: Run Dockerfiler (with push)
-      if: github.ref == 'refs/heads/master'
-      run: make run
+    - name: Run Dockerfiler (no push)
+      run: make dry-run
       env:
         REGISTRY_USERNAME: ${{ secrets.DOCKERHUB_USER }}
         REGISTRY_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
-    - name: Run Dockerfiler (no push)
-      if: github.ref != 'refs/heads/master'
-      run: make dry-run
+
+  build-images-with-push:
+    if: github.ref == 'refs/heads/master'
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Docker login
+      run: docker login --username ${{ secrets.DOCKERHUB_USER }} --password ${{ secrets.DOCKERHUB_PASSWORD }}
+    - name: Run Dockerfiler (with push)
+      run: make run
       env:
         REGISTRY_USERNAME: ${{ secrets.DOCKERHUB_USER }}
         REGISTRY_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
