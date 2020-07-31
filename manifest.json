@@ -36,5 +36,17 @@
         }
       }
     }
+  ],
+  "dockerizedtools/terragrunt": [
+    {
+      "type": "build",
+      "dockerfile_path": "Dockerfile/terragrunt/Dockerfile",
+      "tags": {
+        "0.23.32-tf-0.13.0-rc1": {
+          "TERRAFORM_VERSION": "0.13.0-rc1",
+          "TERRAGRUNT_VERSION": "0.23.32"
+        }
+      }
+    }
   ]
 }
