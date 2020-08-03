@@ -17,6 +17,17 @@
       }
     }
   ],
+  "dockerizedtools/gpg": [
+    {
+      "type": "build",
+      "dockerfile_path": "Dockerfile/gpg/Dockerfile",
+      "tags": {
+        "2.2.20": {
+          "PACKAGE_VERSION": "2.2.20-r0"
+        }
+      }
+    }
+  ],
   "dockerizedtools/mypy": [
     {
       "type": "build",
