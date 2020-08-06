@@ -28,6 +28,15 @@
       }
     }
   ],
+  "dockerizedtools/grip": [
+    {
+      "type": "build",
+      "dockerfile_path": "Dockerfile/grip/Dockerfile",
+      "tags": {
+        "4.5.2": null
+      }
+    }
+  ],
   "dockerizedtools/mypy": [
     {
       "type": "build",
