@@ -69,6 +69,18 @@
         "0.23.33-tf-0.13.0": {
           "TERRAFORM_VERSION": "0.13.0",
           "TERRAGRUNT_VERSION": "0.23.33"
+        },
+        "0.23.36-tf-0.13.1": {
+          "TERRAFORM_VERSION": "0.13.1",
+          "TERRAGRUNT_VERSION": "0.23.36"
+        },
+        "0.23.36-tf-0.12.29": {
+          "TERRAFORM_VERSION": "0.13.0",
+          "TERRAGRUNT_VERSION": "0.23.33"
+        },
+        "0.18.7-tf-0.11.14": {
+          "TERRAFORM_VERSION": "0.11.14",
+          "TERRAGRUNT_VERSION": "0.18.7"
         }
       }
     }
