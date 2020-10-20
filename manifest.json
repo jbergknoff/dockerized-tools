@@ -84,5 +84,18 @@
         }
       }
     }
+  ],
+  "jbergknoff/custom-terraform-demo": [
+    {
+      "type": "build",
+      "dockerfile_path": "Dockerfile/custom-terraform/Dockerfile",
+      "build_context": "Dockerfile/custom-terraform",
+      "tags": {
+        "0.13.4-aws-3.11.0": {
+          "TERRAFORM_BASE_REFERENCE": "v0.13.4",
+          "AWS_PROVIDER_BASE_VERSION": "3.11.0"
+        }
+      }
+    }
   ]
 }
