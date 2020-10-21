@@ -1,0 +1,59 @@
+#!/bin/sh
+
+set -ex
+
+# This script is run as part of `docker build`.
+#
+# We should be in the directory where the base git reference has been checked out.
+# Now, we loop over the patches in the patches/ directory and apply them.
+#
+# Usage: ./apply-patches
+
+# git doesn't let us commit unless we configure author details
+git config user.name terraform-image-automation
+git config user.email nobody@nowhere.com
+
+apply_from_remote_and_reference() {
+  patch_name=$1
+  remote=$2
+  reference=$3
+  git remote add "$patch_name" "$remote"
+  git fetch "$patch_name" "$reference"
+  # Get the exact revision so we can log it for audit purposes (what, exactly, went into this
+  # image?). If we're working with a branch or tag, resolve that. Otherwise, use the reference,
+  # which is assumed to be a commit hash. Fallback logic cf. https://stackoverflow.com/a/62338364
+  revision=$(git rev-parse -q --verify "$patch_name"/"$reference" || echo "$reference")
+  echo Revision: "$revision"
+  git merge --squash "$revision"
+}
+
+apply_from_script() {
+  patch_name=$1
+  ./patches/"$patch_name"/apply "$patch_name"
+}
+
+for patch_path in patches/*
+do
+  # If there were no glob matches, don't loop.
+  if [ ! -e "$patch_path" ]; then
+    break
+  fi
+
+  patch_name=$(basename "$patch_path")
+  echo Applying patch "$patch_name"
+
+  if [ -f patches/"$patch_name"/remote ] && [ -f patches/"$patch_name"/reference ]; then
+    # A typical patch specifies a remote (e.g. https://github.com/somebody/terraform-provider-aws)
+    # and a reference (a branch name or commit hash) and doesn't provide an `apply` script.
+    apply_from_remote_and_reference "$patch_name" "$(cat patches/"$patch_name"/remote)" "$(cat patches/"$patch_name"/reference)"
+  elif [ -f "$patch_path"/apply ]; then
+    # Patch bringing its own apply script
+    apply_from_script "$patch_name"
+  else
+    echo Patch "$patch_name" should have either \\\`remote\\\` and \\\`reference\\\` files or an \\\`apply\\\` script.
+    exit 1
+  fi
+
+  # Can't `merge --squash` more than once in a row without committing in between.
+  git commit -m "Applying patch ""$patch_name"
+done

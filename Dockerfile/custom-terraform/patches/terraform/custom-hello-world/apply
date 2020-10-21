@@ -1,0 +1,4 @@
+#!/bin/sh -ex
+
+git apply patches/$1/diff.patch
+git add help.go

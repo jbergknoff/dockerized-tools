@@ -1,0 +1,67 @@
+https://github.com/terraform-providers/terraform-provider-aws/pull/13813
+
+IAM policies have several fields that are actually unordered sets internally, but AWS
+APIs, and Terraform, represent them as arrays. As a result, the lists are often reordered
+and we get ugly diffs in Terraform. Examples are the principals and resources in a
+policy statement.
+
+Here's an example plan where it bites us:
+
+```
+# aws_s3_bucket_policy.cross_account_access will be updated in-place
+  ~ resource "aws_s3_bucket_policy" "cross_account_access" {
+        bucket = "my-bucket"
+        id     = "my-bucket"
+      ~ policy = jsonencode(
+          ~ {
+              ~ Statement = [
+                  ~ {
+                        Action    = [
+                            "s3:ListBucket",
+                            "s3:GetBucketLocation",
+                        ]
+                        Effect    = "Allow"
+                      ~ Principal = {
+                          ~ AWS = [
+                              + "arn:aws:iam::567890123456:root",
+                              + "arn:aws:iam::345678901234:root",
+                              - "arn:aws:iam::123456789012:root",
+                              - "arn:aws:iam::567890123456:root",
+                              + "arn:aws:iam::345678901234:root",
+                            ]
+                        }
+                        Resource  = "arn:aws:s3:::my-bucket"
+                        Sid       = "BucketUsage"
+                    },
+                    ...
+```
+
+This patch orders these lists before they're serialized to state, and as they're read
+from the AWS API. As a result, the diffs only show the changes. Here's the same plan
+after applying the patch:
+
+```
+  # aws_s3_bucket_policy.cross_account_access will be updated in-place
+  ~ resource "aws_s3_bucket_policy" "cross_account_access" {
+        bucket = "my-bucket"
+        id     = "my-bucket"
+      ~ policy = jsonencode(
+          ~ {
+              ~ Statement = [
+                  ~ {
+                        Action    = [
+                            "s3:ListBucket",
+                            "s3:GetBucketLocation",
+                        ]
+                        Effect    = "Allow"
+                      ~ Principal = {
+                          ~ AWS = [
+                              - "arn:aws:iam::123456789012:root",
+                                "arn:aws:iam::345678901234:root",
+                                "arn:aws:iam::567890123456:root",
+                            ]
+                        }
+                        Resource  = "arn:aws:s3:::my-bucket"
+                        Sid       = "BucketUsage"
+                    },
+```
