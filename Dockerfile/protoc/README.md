@@ -1,4 +1,4 @@
-# flake8
+# protoc
 
 This is an unofficial image for the protobuf compiler [protoc](https://github.com/protocolbuffers/protobuf), made available as `dockerizedtools/protoc` on [Docker Hub](https://hub.docker.com/r/dockerizedtools/protoc).
 
