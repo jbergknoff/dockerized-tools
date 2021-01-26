@@ -57,6 +57,19 @@
       }
     }
   ],
+  "dockerizedtools/protoc": [
+    {
+      "type": "build",
+      "dockerfile_path": "Dockerfile/protoc/Dockerfile",
+      "tags": {
+        "3.14.0": {
+          "PROTOC_TAG": "v3.14.0",
+          "PROTOC_GEN_GO_TAG": "v1.4.3",
+          "PROTOC_GEN_GO_GRPC_TAG": "v1.1.0"
+        }
+      }
+    }
+  ],
   "dockerizedtools/terragrunt": [
     {
       "type": "build",
